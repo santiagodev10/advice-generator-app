@@ -42,6 +42,23 @@ function saveFavoriteQuotes(id, advice) {
     }
 
     //Aqui tiene que ir la logica para renderizar el boton de favoritos
+    if (JSON.parse(localStorage.adviceQuotes).length <= 1) {
+        createFavoritesButton();
+    }
+}
+
+function createFavoritesButton() {
+    console.log("SI ESTA ADVICEQUOTES");
+    //hay que crear el boton de ver la lista de favoritos
+    const optionsContainer = document.querySelector(".options");
+    const favoritesButton = document.createElement("button");
+    favoritesButton.textContent = "FAVORITES ⭐";
+    favoritesButton.classList.add("button-styles");
+    optionsContainer.appendChild(favoritesButton);
+}
+
+if (localStorage.length > 0) {
+    createFavoritesButton();
 }
 
 getQuote();

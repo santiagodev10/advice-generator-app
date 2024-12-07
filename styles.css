@@ -1,0 +1,46 @@
+html {
+    font-family: "Manrope", sans-serif;
+}
+
+* {
+    font-size: 62.5%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /*COLOURS*/
+    /*Primary*/
+    --Light-Cyan: hsl(193, 38%, 86%);
+    --Neon-Green: hsl(150, 100%, 66%);
+    /*Neutral*/
+    --Grayish-Blue: hsl(217, 19%, 38%);
+    --Dark-Grayish-Blue: hsl(217, 19%, 24%);
+    --Dark-Blue: hsl(218, 23%, 16%);
+}
+
+body {
+    background-color: var(--Dark-Blue);
+}
+
+main {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.card {
+    height: 290px;
+    width: 100%;
+    max-width: 460px;
+    border-radius: 10px;
+    background-color: var(--Dark-Grayish-Blue);
+}
+
+img {
+    width: 100%;
+}

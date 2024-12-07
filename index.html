@@ -4,20 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="./images/favicon-32x32.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./styles.css">
     <script src="./script.js" defer></script>
     <title>Advice Generator App</title>
 </head>
 <body>
-    <section class="card">
-        <p class="card__advice-number"></p>
-        <p class="card__advice-string"></p>
-        <span><img src="./images/pattern-divider-mobile.svg" alt="divider-mobile"></span>
-        <button class="get-quote"><img src="./images/icon-dice.svg" alt="icon-dice-image"></button>
-    </section>
-
-    <section class="">
-        <button class="save-quote">Guardar en favoritos</button>
-    </section>
+    <main>
+        <section class="card">
+            <p class="card__advice-number"></p>
+            <p class="card__advice-string"></p>
+            <span><img src="./images/pattern-divider-mobile.svg" alt="divider-mobile"></span>
+            <button class="get-quote"><img src="./images/icon-dice.svg" alt="icon-dice-image"></button>
+        </section>
+    
+        <section class="options">
+            <button class="save-quote">Guardar en favoritos</button>
+        </section>
+    </main>
 </body>
 </html>

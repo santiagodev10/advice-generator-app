@@ -30,14 +30,83 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 70px;
     padding: 15px;
 }
 
 .card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
     height: 290px;
     width: 100%;
     max-width: 460px;
+    position: relative;
+    text-align: center;
+    padding: clamp(20px, 6%, 30px);
     border-radius: 10px;
+    background-color: var(--Dark-Grayish-Blue);
+}
+
+.card__advice-number {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--Neon-Green);
+}
+
+.card__advice-string {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--Light-Cyan);
+}
+
+.card span {
+    width: 100%;
+}
+
+.card__get-quote {
+    position: absolute;
+    bottom: -25px;
+    width: 50px;
+    padding: 16px;
+    border-radius: 30px;
+    border: none;
+    background-color: var(--Neon-Green);
+    cursor: pointer;
+}
+
+.card__get-quote img {
+    transition: all 0.1s ease-in 0.1s;
+}
+
+.card__get-quote:hover img {
+    transform: scale(1.6);
+    
+}
+
+.options {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.options__save-quote {
+    font-size: 1.2rem;
+    font-weight: 800;
+    border: none;
+    border-radius: 15px;
+    padding: 12px;
+    color: var(--Dark-Grayish-Blue);
+    background-color: var(--Neon-Green);
+    cursor: pointer;
+}
+
+.options__save-quote:hover {
+    transition: all 0.5s ease 0.1s;
+    color: var(--Light-Cyan);
     background-color: var(--Dark-Grayish-Blue);
 }
 

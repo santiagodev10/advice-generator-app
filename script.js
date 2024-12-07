@@ -1,7 +1,7 @@
 //Vamos a seleccionar los elementos del DOM, pondremos un listener al boton, que al hacer click se dispare la funcion que haga el llamado a la API
 const API = "https://api.adviceslip.com/advice";
-const diceButton = document.querySelector(".get-quote");
-const saveFavoriteButton = document.querySelector(".save-quote");
+const diceButton = document.querySelector(".card__get-quote");
+const saveFavoriteButton = document.querySelector(".options__save-quote");
 
 diceButton.addEventListener("click", getQuote);
 
@@ -18,7 +18,7 @@ async function getQuote() {
     
         saveFavoriteButton.addEventListener("click", () => saveFavoriteQuotes(data.slip.id, data.slip.advice));
     } catch (error) {
-        console.log("La solicitud salio mal" + error);
+        console.log("The request went wrong " + error);
     }
 }
 

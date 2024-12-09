@@ -1,6 +1,6 @@
 //Vamos a seleccionar los elementos del DOM, pondremos un listener al boton, que al hacer click se dispare la funcion que haga el llamado a la API
 const API = "https://api.adviceslip.com/advice";
-const diceButton = document.querySelector(".card__get-quote");
+const diceButton = document.querySelector(".front__get-quote");
 const saveFavoriteButton = document.querySelector(".options__save-quote");
 
 diceButton.addEventListener("click", getQuote);
@@ -11,12 +11,18 @@ async function getQuote() {
         const data = await response.json();
         console.log(data.slip);
     
-        const adviceString = document.querySelector(".card__advice-string");
-        const adviceNumber = document.querySelector(".card__advice-number");
+        const adviceString = document.querySelector(".front__advice-string");
+        const adviceNumber = document.querySelector(".front__advice-number");
         adviceString.textContent = `"${data.slip.advice}"`;
-        adviceNumber.textContent = `ADVICE #${data.slip.id}`
+        adviceNumber.textContent = `ADVICE #${data.slip.id}`;
     
         saveFavoriteButton.addEventListener("click", () => saveFavoriteQuotes(data.slip.id, data.slip.advice));
+
+        const favoriteListButton = document.querySelector(".options__favorites");
+
+        if(favoriteListButton) {
+            favoriteListButton.addEventListener("click", favoritesList);
+        }
     } catch (error) {
         console.log("The request went wrong " + error);
     }
@@ -52,9 +58,73 @@ function createFavoritesButton() {
     //hay que crear el boton de ver la lista de favoritos
     const optionsContainer = document.querySelector(".options");
     const favoritesButton = document.createElement("button");
-    favoritesButton.textContent = "FAVORITES ⭐";
+    favoritesButton.textContent = "FAVORITE QUOTES ⭐";
+    favoritesButton.classList.add("options__favorites")
     favoritesButton.classList.add("button-styles");
     optionsContainer.appendChild(favoritesButton);
+}
+
+function favoritesList() {
+    //Esta funcion tiene mostrar la lista de favoritos que contiene las frases almacenadas en localStorage, y aplicarle las clases a los elementos para haga las transiciones respectivas, ya de eso se encarga CSS.
+    const card = document.querySelector(".card"); 
+    const optionsContainer = document.querySelector(".options");
+    card.classList.add("card--transition");
+    // optionsContainer.classList.add("inactive");
+    // optionsContainer.classList.add("trigger-inactive");
+
+    const storedQuotes = JSON.parse(localStorage.getItem("adviceQuotes"));
+    const storedIds = JSON.parse(localStorage.getItem("adviceIds"));
+    console.log(storedQuotes);
+    console.log(storedIds);
+    
+    //crear elementos que contendran las frases y ids guardados en localStorage
+    const backCard = document.querySelector(".card__back");
+    const ul = document.createElement("ul");
+
+    storedIds.forEach(element => {
+        const li = document.createElement("li");
+        const adviceSpan = document.createElement("span");
+        const removeAdvice = document.createElement("span");
+
+        adviceSpan.textContent = `ADVICE #${element}`;
+        removeAdvice.textContent = "❌";
+        li.classList.add("back__items-style");
+        adviceSpan.classList.add("items-style__advice-number");
+        adviceSpan.classList.add("advice-number");
+        removeAdvice.classList.add("items-style__remove-item");
+        li.append(adviceSpan, removeAdvice);
+        backCard.appendChild(ul);
+        ul.appendChild(li);
+    });
+
+    //Boton para limpiar el localStorage
+    const favoritesButton = document.querySelector(".options__favorites");
+    const removeAllItemsButton = document.createElement("button");
+    removeAllItemsButton.textContent = "REMOVE ALL ITEMS ❌";
+    removeAllItemsButton.classList.add("options__remove-all-items");
+    removeAllItemsButton.classList.add("button-styles");
+    removeAllItemsButton.classList.add("card--childs");
+    favoritesButton.classList.add("card--childs");
+    saveFavoriteButton.classList.add("card--childs");
+    optionsContainer.classList.add("buttons--transition");
+    optionsContainer.append(removeAllItemsButton);
+
+    removeAllItemsButton.addEventListener("click", () => clearAdvicesList());
+}
+
+function clearAdvicesList() {
+    const items = document.querySelectorAll(".back__items-style");
+    items.forEach(element => element.remove());
+    localStorage.clear();
+
+    //Mostrar mensaje al usuario que no hay items agregados
+    const cardBack = document.querySelector(".card__back");
+    const message = document.createElement("p");
+    message.textContent = "NO ITEMS ADDED 😓";
+    cardBack.classList.add("card--message");
+    message.classList.add("message");
+
+    cardBack.appendChild(message);
 }
 
 if (localStorage.length > 0) {

@@ -7,6 +7,8 @@ html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    list-style: none;
+    text-decoration: none;
 }
 
 :root {
@@ -39,7 +41,6 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 25px;
     height: 290px;
     width: 100%;
     max-width: 460px;
@@ -48,27 +49,42 @@ main {
     padding: clamp(20px, 6%, 30px);
     border-radius: 10px;
     background-color: var(--Dark-Grayish-Blue);
+    transform-style: preserve-3d;
 }
 
-.card__advice-number {
+.card--childs {
+    position: absolute;
+    backface-visibility: hidden;
+}
+
+.card__front {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    padding: inherit;
+}
+
+.advice-number {
     font-size: clamp(1rem, 2vw, 1.2rem);
     font-weight: 600;
     letter-spacing: 4px;
     color: var(--Neon-Green);
 }
 
-.card__advice-string {
+.advice-string {
     font-size: 2rem;
     font-weight: 800;
     color: var(--Light-Cyan);
 }
 
-.card span {
+.card__front span {
     width: 100%;
 }
 
-.card__get-quote {
-    position: absolute;
+.front__get-quote {
+    position: fixed;
     bottom: -25px;
     width: 50px;
     padding: 16px;
@@ -78,22 +94,76 @@ main {
     cursor: pointer;
 }
 
-.card__get-quote img {
-    transition: all 0.1s ease-in 0.1s;
+.front__get-quote img {
+    transition: all 0.1s;
 }
 
-.card__get-quote:hover img {
-    transform: scale(1.6);
-    
+.front__get-quote:hover img {
+    transform: scale(1.6) rotate(180deg);
+}
+
+.card__back {
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    text-align: justify;
+    overflow-y: scroll;
+    transform: rotateY(180deg);
+}
+
+.card--transition {
+    transform: rotateY(180deg);
+    transition: transform 1s;
+}
+
+.card__back ul {
+    display: grid;
+    gap: 20px;
+}
+
+.card--message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.back__items-style {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid;
+}
+
+.items-style__advice-number:hover {
+    color: white;
+    cursor: pointer;
+}
+
+.items-style__remove-item {
+    font-size: 1.6rem;
+    transition: transform 0.2s;
+    cursor: pointer;
+}
+
+.items-style__remove-item:hover {
+    transform: scale(1.5);
 }
 
 .options {
-    width: 60%;
+    width: 70%;
+    max-width: 280px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 20px;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+.options__remove-all-items {
+    transform: rotateY(180deg);
 }
 
 .button-styles {
@@ -101,7 +171,7 @@ main {
     font-size: 1.2rem;
     font-weight: 800;
     border: none;
-    border-radius: 15px;
+    border-radius: 10px;
     padding: 12px;
     color: var(--Dark-Grayish-Blue);
     background-color: var(--Neon-Green);
@@ -114,12 +184,35 @@ main {
     background-color: var(--Dark-Grayish-Blue);
 }
 
+.buttons--transition {
+    transform: rotateY(180deg);    
+    transition: transform 0.5s;
+}
+
 img {
     width: 100%;
+}
+
+.inactive {
+    transform: rotateY(90deg);
+    visibility: hidden;
+}
+
+.trigger-inactive {
+    transition: all 0.5s;
+}
+
+.message {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--Neon-Green);
+    transform: scale(2);
+    transition: all 0.5s;
 }
 
 @media (min-width:600px) {
     .options {
         flex-direction: row;
+        max-width: 460px;
     }
 }

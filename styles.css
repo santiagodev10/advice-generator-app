@@ -83,7 +83,7 @@ main {
     width: 100%;
 }
 
-.front__get-quote {
+.front__get-advice {
     position: fixed;
     bottom: -25px;
     width: 50px;
@@ -94,11 +94,11 @@ main {
     cursor: pointer;
 }
 
-.front__get-quote img {
+.front__get-advice img {
     transition: all 0.1s;
 }
 
-.front__get-quote:hover img {
+.front__get-advice:hover img {
     transform: scale(1.6) rotate(180deg);
 }
 
@@ -127,7 +127,7 @@ main {
     align-items: center;
 }
 
-.back__items-style {
+.back__items {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -135,18 +135,18 @@ main {
     border-bottom: 1px solid;
 }
 
-.items-style__advice-number:hover {
+.items__advice-number:hover {
     color: white;
     cursor: pointer;
 }
 
-.items-style__remove-item {
+.items__remove-item {
     font-size: 1.6rem;
     transition: transform 0.2s;
     cursor: pointer;
 }
 
-.items-style__remove-item:hover {
+.items__remove-item:hover {
     transform: scale(1.5);
 }
 
@@ -158,11 +158,34 @@ main {
     justify-content: center;
     align-items: center;
     gap: 20px;
+}
+
+.options--container {
+    width: 100%;
+    height: 40px;
     position: relative;
     transform-style: preserve-3d;
 }
 
+.options__save-advice-container,
+.options__favorites-container {
+    width: 100%;
+}
+
+.options--childs {
+    position: absolute;
+    backface-visibility: hidden;
+}
+
 .options__remove-all-items {
+    transform: rotateY(180deg);
+}
+
+.options__go-back {
+    transform: rotateY(180deg);
+}
+
+.options__buttons--transition {
     transform: rotateY(180deg);
 }
 
@@ -193,8 +216,12 @@ img {
     width: 100%;
 }
 
-.inactive {
+/* .inactive {
     transform: rotateY(90deg);
+    visibility: hidden;
+} */
+
+.inactive {
     visibility: hidden;
 }
 

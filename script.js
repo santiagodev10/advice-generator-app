@@ -149,8 +149,8 @@ function clearAdvicesList() {
     cardBack.appendChild(message);
 
     //Desaparecer el boton porque ya se uso, pero realmente lo que hay es que remover el contenedor del boton de remover item y el boton de save to favorites
-    const removeAllItemsButton = document.querySelector(".options__remove-all-items");
-    removeAllItemsButton.remove();
+    const containerOfButtons = document.querySelector(".options__favorites-container");
+    containerOfButtons.remove();
 }
 
 if (localStorage.length > 0) {

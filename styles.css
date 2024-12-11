@@ -112,8 +112,11 @@ main {
 }
 
 .card--transition {
-    transform: rotateY(180deg);
     transition: transform 1s;
+}
+
+.card--transform {
+    transform: rotateY(180deg);
 }
 
 .card__back ul {
@@ -208,8 +211,11 @@ main {
 }
 
 .buttons--transition {
-    transform: rotateY(180deg);    
     transition: transform 0.5s;
+}
+
+.buttons--transform {
+    transform: rotateY(180deg);    
 }
 
 img {

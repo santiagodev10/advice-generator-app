@@ -21,7 +21,7 @@ async function getAdvice() {
         const favoriteListButton = document.querySelector(".options__favorites");
 
         if(favoriteListButton) {
-            favoriteListButton.addEventListener("click", favoritesList);
+            favoriteListButton.addEventListener("click", showFavoritesList);
         }
     } catch (error) {
         console.log("The request went wrong " + error);
@@ -47,19 +47,26 @@ function saveFavoriteAdvice(id, advice) {
         console.log("YA ESTA GUARDADO ESE STRING");
     }
 
-    //Aqui tiene que ir la logica para renderizar el boton de favoritos
+    //Logica para renderizar el boton de favoritos
+    const containerOfRemoveButton = document.querySelector(".options__favorites-container");
     // Verifica si la bandera 'buttonCreated' existe en localStorage 
-    if (!localStorage.getItem('buttonCreated')) { 
+    if (!localStorage.getItem('buttonCreated') && !containerOfRemoveButton) { 
         createFavoritesButton(); 
         // Establece la bandera 'buttonCreated' en localStorage para indicar que el botón se ha creado 
         localStorage.setItem('buttonCreated', true); 
+    } else if(containerOfRemoveButton.classList.contains("inactive")) {
+        //Al removerle la clase inactive, el contenedor vuelve a ser visible, necesitamos eso a partir de la segunda iteracion o cuando no exista el contenedor en el DOM
+        containerOfRemoveButton.classList.remove("inactive");
     }
     
 
     const favoriteListButton = document.querySelector(".options__favorites");
 
     if(favoriteListButton) {
-        favoriteListButton.addEventListener("click", favoritesList);
+        favoriteListButton.addEventListener("click", showFavoritesList);  
+        //Quita la clase de card--message a la parte de atras de la tarjeta
+        const cardBack = document.querySelector(".card__back");
+        cardBack.classList.remove("card--message");
     }
 
     //Hay que mostrar algun mensaje o indicacion al usuario que guardo el advice, y tambien en caso de que ya lo tenga guardado
@@ -80,10 +87,10 @@ function createFavoritesButton() {
     optionsContainer.append(favoritesButton);
 }
 
-function favoritesList() {
+function showFavoritesList() {
     //Esta funcion tiene mostrar la lista de favoritos que contiene las frases almacenadas en localStorage, y aplicarle las clases a los elementos para haga las transiciones respectivas, ya de eso se encarga CSS.
     const card = document.querySelector(".card"); 
-    card.classList.add("card--transition");
+    card.classList.add("card--transition", "card--transform");
     // options.classList.add("inactive");
     // options.classList.add("trigger-inactive");
 
@@ -91,12 +98,22 @@ function favoritesList() {
     const storedIds = JSON.parse(localStorage.getItem("adviceIds"));
     console.log(storedQuotes);
     console.log(storedIds);
+
+    // Crear elementos que contendrán las frases y ids guardados en localStorage
+    const backCard = document.querySelector(".card__back"); 
+    const ul = backCard.querySelector("ul") || document.createElement("ul"); 
+
+    if (!backCard.contains(ul)) { 
+        backCard.appendChild(ul); 
+    } 
     
-    //crear elementos que contendran las frases y ids guardados en localStorage
-    const backCard = document.querySelector(".card__back");
-    const ul = document.createElement("ul");
+    ul.innerHTML = ""; // Limpiar el contenido del ul antes de agregar los elementos
 
     storedIds.forEach(element => {
+        const message = document.querySelector(".message");
+        if(backCard.contains(message)) {
+            message.remove();
+        }
         const li = document.createElement("li");
         const adviceSpan = document.createElement("span");
         const removeAdvice = document.createElement("span");
@@ -112,26 +129,35 @@ function favoritesList() {
         ul.appendChild(li);
     });
 
-    //Boton para limpiar el localStorage y boton para volver a la parte frontal de la tarjeta
+    //De esta manera siempre se genera la transicion porque en cada ejecucion se le aplican las clases de las transformaciones y transiciones a los contenedores
     const saveAdviceContainer = document.querySelector(".options__save-advice-container");
     const favoritesContainer = document.querySelector(".options__favorites-container");
-    const favoritesButton = document.querySelector(".options__favorites");
-    const removeAllItemsButton = document.createElement("button");
-    const goBackButton = document.createElement("button");
-    saveAdviceContainer.classList.add("options--container", "buttons--transition");
-    favoritesContainer.classList.add("options--container", "buttons--transition");
+    saveAdviceContainer.classList.add("options--container", "buttons--transition", "buttons--transform");
+    favoritesContainer.classList.add("options--container", "buttons--transition", "buttons--transform");
 
-    removeAllItemsButton.textContent = "REMOVE ALL ITEMS ❌";
-    goBackButton.textContent = "GO BACK ⬅";
-    removeAllItemsButton.classList.add("options__remove-all-items", "button-styles", "options--childs");
-    goBackButton.classList.add("options__go-back", "button-styles", "options--childs");
-    favoritesButton.classList.add("options--childs");
-    saveFavoriteButton.classList.add("options--childs");
-    //Contenedores de botones
-    saveAdviceContainer.append(goBackButton);
-    favoritesContainer.append(removeAllItemsButton);
+    //Boton para limpiar el localStorage y boton para volver a la parte frontal de la tarjeta
+    //Validar que se crea UNA SOLA VEZ el boton de remove all items y el boton de go back
+    const goBackButton = document.querySelector(".options__go-back");
+    const removeButton = document.querySelector(".options__remove-all-items");
 
-    removeAllItemsButton.addEventListener("click", () => clearAdvicesList());
+    if (!goBackButton && !removeButton) {
+        const favoritesButton = document.querySelector(".options__favorites");
+        const removeAllItemsButtonCreated = document.createElement("button");
+        const goBackButtonCreated = document.createElement("button");
+    
+        removeAllItemsButtonCreated.textContent = "REMOVE ALL ITEMS ❌";
+        goBackButtonCreated.textContent = "GO BACK ⬅";
+        removeAllItemsButtonCreated.classList.add("options__remove-all-items", "button-styles", "options--childs");
+        goBackButtonCreated.classList.add("options__go-back", "button-styles", "options--childs");
+        favoritesButton.classList.add("options--childs");
+        saveFavoriteButton.classList.add("options--childs");
+        //Contenedores de botones
+        saveAdviceContainer.append(goBackButtonCreated);
+        favoritesContainer.append(removeAllItemsButtonCreated);
+
+        goBackButtonCreated.addEventListener("click", () => goBackToFrontfaceCard());
+        removeAllItemsButtonCreated.addEventListener("click", () => clearAdvicesList());
+    }
 }
 
 function clearAdvicesList() {
@@ -149,8 +175,22 @@ function clearAdvicesList() {
     cardBack.appendChild(message);
 
     //Desaparecer el boton porque ya se uso, pero realmente lo que hay es que remover el contenedor del boton de remover item y el boton de save to favorites
-    const containerOfButtons = document.querySelector(".options__favorites-container");
-    containerOfButtons.remove();
+    const containerOfRemoveButton = document.querySelector(".options__favorites-container");
+    containerOfRemoveButton.classList.add("inactive");
+}
+
+function goBackToFrontfaceCard() {
+    const goBackButton = document.querySelector(".options__go-back");
+    const card = document.querySelector(".card");
+    console.log(goBackButton);
+    //Quitarle la transformacion para que vuelva a la parte frontal de la tarjeta
+    card.classList.remove("card--transform");
+
+    //Hay que quitarle la transformacion a los botones para que vuelvan a su cara frontal
+    const containerOfGoBackButton = document.querySelector(".options__save-advice-container");
+    const containerOfRemoveButton = document.querySelector(".options__favorites-container");
+    containerOfGoBackButton.classList.remove("buttons--transform");
+    containerOfRemoveButton.classList.remove("buttons--transform");
 }
 
 if (localStorage.length > 0) {

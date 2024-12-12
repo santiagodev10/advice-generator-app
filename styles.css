@@ -175,6 +175,11 @@ main {
     width: 100%;
 }
 
+.save-advice-container--button-centered {
+    position: relative;
+    left: 25%;
+}
+
 .options--childs {
     position: absolute;
     backface-visibility: hidden;
@@ -231,9 +236,9 @@ img {
     visibility: hidden;
 }
 
-.trigger-inactive {
+/* .trigger-inactive {
     transition: all 0.5s;
-}
+} */
 
 .message {
     font-size: 1.2rem;

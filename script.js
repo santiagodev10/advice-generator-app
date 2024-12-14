@@ -8,6 +8,9 @@ diceButton.addEventListener("click", getAdvice);
 
 async function getAdvice() {
     try {
+        const diceImage = document.querySelector(".get-advice__dice-img");
+        diceImage.classList.add("get-advice__dice-img--rotate");
+
         const response = await fetch(API);
         const data = await response.json();
         console.log(data.slip);
@@ -17,7 +20,6 @@ async function getAdvice() {
         adviceString.textContent = `"${data.slip.advice}"`;
         adviceNumber.textContent = `ADVICE #${data.slip.id}`;
 
-        // saveFavoriteButton.addEventListener("click", () => saveFavoriteAdvice(data.slip.id, data.slip.advice));
         // Guarda el consejo actual en el botón de guardar favoritos 
         saveFavoriteButton.dataset.id = data.slip.id; 
         saveFavoriteButton.dataset.advice = data.slip.advice;
@@ -50,14 +52,6 @@ function saveFavoriteAdvice() {
         //Aqui hay que colocar un aviso al usuario que guardo ese advice
         console.log("YA ESTA GUARDADO ESE STRING");
     }
-
-    // if (!adviceObject.includes(advice && id)) { 
-    //     adviceObject.push({advice, id});
-    //     localStorage.setItem("adviceObject", JSON.stringify(adviceObject));
-    //     console.log("SE GUARDO EN LOCALSTORAGE");
-    // } else {
-    //     console.log("YA ESTA GUARDADO ESE STRING");
-    // }
 
     //Logica para renderizar el boton de favoritos
     const containerOfRemoveButton = document.querySelector(".options__favorites-container");
@@ -136,15 +130,19 @@ function showFavoritesList() {
         //Creando elementos
         const li = document.createElement("li");
         const adviceSpan = document.createElement("span");
+        const dropDownArrow = document.createElement("img");
         const removeAdvice = document.createElement("span");
 
         //Insertando contenido a los elementos y renderizandolos
         adviceSpan.textContent = `ADVICE #${adviceElement.id}`;
+        dropDownArrow.src = "./images/up-arrow.png";
         removeAdvice.textContent = "❌";
         li.classList.add("back__items");
         adviceSpan.classList.add("items__advice-number");
         adviceSpan.classList.add("advice-number");
+        dropDownArrow.classList.add("drop-down-arrow");
         removeAdvice.classList.add("items__remove-item");
+        adviceSpan.append(dropDownArrow);
         li.append(adviceSpan, removeAdvice);
         backCard.appendChild(ul);
         ul.appendChild(li);
@@ -178,6 +176,10 @@ function showFavoritesList() {
 
         goBackButtonCreated.addEventListener("click", () => goBackToFrontfaceCard());
         removeAllItemsButtonCreated.addEventListener("click", () => clearAdvicesList());
+
+        //Listener para el ul que dispara la funcion openAndCloseAdvice
+        ul.addEventListener("click", (event) => openAndCloseAdvice(event));
+
     }
 }
 
@@ -219,6 +221,54 @@ function goBackToFrontfaceCard() {
     const containerOfRemoveButton = document.querySelector(".options__favorites-container");
     containerOfGoBackButton.classList.remove("buttons--transform");
     containerOfRemoveButton.classList.remove("buttons--transform");
+}
+
+function openAndCloseAdvice(event) {
+    //En esta funcion tiene que ir la logica para abrir el advice, eso quiere decir que el elemento que tiene el id debe tener un listener que dispare esta funcion.
+    // console.log(event.target);
+    
+    // const liItems = document.querySelectorAll(".back__items");
+    // console.log(liItems);
+
+    const liItem = event.target.closest(".back__items");
+    const specificItemClicked = event.target.closest(".items__advice-number");
+    const specificRemoveItemClicked = event.target.closest(".items__remove-item");
+    console.log(specificItemClicked);
+    console.log(specificRemoveItemClicked);
+    
+    if (specificItemClicked) {
+        const storage = JSON.parse(localStorage.getItem("adviceObject"));
+        console.log(storage);
+        
+        const findSpecificItem = storage.find(item => {
+            const adviceId = specificItemClicked.textContent.substring(8);
+            console.log(adviceId);
+            // console.log(item.id);
+            
+            if(item.id === adviceId) {
+                console.log("SI COINCIDEN LOS IDS");
+                console.log(item.advice);
+                //Debo crear el elemento donde se va a desplegar el advice
+                let adviceElement = liItem.querySelector(".items__advice-string");
+                const dropDownArrow = liItem.querySelector(".drop-down-arrow");
+                  
+                if(!adviceElement) {
+                    adviceElement = document.createElement("span");
+                    adviceElement.textContent = item.advice;
+                    adviceElement.classList.add("items__advice-string");
+                    liItem.append(adviceElement);
+                    //Rotar la imagen de la flecha mirando hacia abajo
+                    dropDownArrow.classList.add("drop-down-arrow--rotate");
+                } else {
+                    dropDownArrow.classList.remove("drop-down-arrow--rotate");
+                    adviceElement.remove();
+                }
+            }
+        })
+
+        console.log(findSpecificItem);
+        
+    }
 }
 
 if (localStorage.length > 0) {

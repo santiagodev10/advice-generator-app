@@ -291,6 +291,23 @@ img {
     transition: all 0.5s;
 }
 
+.notification-message {
+    position: absolute;
+    top: 8%;
+    z-index: 1;
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--Neon-Green);
+}
+
+.transition {
+    opacity: 0;
+    transition: opacity 2s;
+}
+
 @media (min-width:600px) {
     .options {
         flex-direction: row;

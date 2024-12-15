@@ -42,14 +42,37 @@ function saveFavoriteAdvice() {
     console.log(advice);
 
     //Por defecto adviceObject es un template string con sintaxis de array, pero al final del dia es un string, por eso se parsea a un array como tal con JSON.parse, y si no existe una propiedad "adviceObject" entonces se crea un array vacio
+    const main = document.querySelector("main");
     let adviceObject = JSON.parse(localStorage.getItem("adviceObject")) || [];
     
     if (!adviceObject.some(item => item.advice === advice)) {
         adviceObject.push({advice, id});
         localStorage.setItem("adviceObject", JSON.stringify(adviceObject));
+        //Aviso para hacerle saber al usuario que el advice fue guardado
+        const adviceStoredNotification = document.createElement("span");
+        adviceStoredNotification.textContent = "Advice saved ✅";
+        adviceStoredNotification.classList.add("notification-message");
+        main.prepend(adviceStoredNotification); 
+        setTimeout(function() {
+            adviceStoredNotification.classList.add("transition");
+        });
+        adviceStoredNotification.addEventListener("transitionend", () => {
+            adviceStoredNotification.remove();
+        })    
+        
         console.log("SE GUARDO EN LOCALSTORAGE");
     } else {
         //Aqui hay que colocar un aviso al usuario que guardo ese advice
+        const advicePreviouslyStored = document.createElement("span");
+        advicePreviouslyStored.textContent = "Advice already saved ⭐";
+        advicePreviouslyStored.classList.add("notification-message");
+        main.prepend(advicePreviouslyStored); 
+        setTimeout(function() {
+            advicePreviouslyStored.classList.add("transition");
+        });
+        advicePreviouslyStored.addEventListener("transitionend", () => {
+            advicePreviouslyStored.remove();
+        })
         console.log("YA ESTA GUARDADO ESE STRING");
     }
 
@@ -75,10 +98,7 @@ function saveFavoriteAdvice() {
         //Quita la clase de card--message a la parte de atras de la tarjeta
         const cardBack = document.querySelector(".card__back");
         cardBack.classList.remove("card--message");
-    }
-
-    //Hay que mostrar algun mensaje o indicacion al usuario que guardo el advice
-    
+    }    
 }
 
 function createFavoritesButton() {

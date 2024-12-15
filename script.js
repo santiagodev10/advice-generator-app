@@ -103,9 +103,7 @@ function showFavoritesList() {
     // options.classList.add("trigger-inactive");
 
     const storedAdvices = JSON.parse(localStorage.getItem("adviceObject"));
-    // const storedIds = JSON.parse(localStorage.getItem("adviceIds"));
     console.log(storedAdvices);
-    // console.log(storedIds);
 
     // Crear elementos que contendrán las frases y ids guardados en localStorage
     const backCard = document.querySelector(".card__back"); 
@@ -177,8 +175,9 @@ function showFavoritesList() {
         goBackButtonCreated.addEventListener("click", () => goBackToFrontfaceCard());
         removeAllItemsButtonCreated.addEventListener("click", () => clearAdvicesList());
 
-        //Listener para el ul que dispara la funcion openAndCloseAdvice
-        ul.addEventListener("click", (event) => openAndCloseAdvice(event));
+        //Listener para el ul que dispara la funcion openAndCloseStoredAdvice
+        ul.addEventListener("click", (event) => openAndCloseStoredAdvice(event));
+        //Listener para el ul, que detecte el elemento especifico usando el delegation pattern y dispare la funcion clearSpecificAdvice removiendo el item especifico
 
     }
 }
@@ -189,13 +188,7 @@ function clearAdvicesList() {
     localStorage.clear();
 
     //Mostrar mensaje al usuario que no hay items agregados
-    const cardBack = document.querySelector(".card__back");
-    const message = document.createElement("p");
-    message.textContent = "NO ITEMS ADDED 😓";
-    cardBack.classList.add("card--message");
-    message.classList.add("message");
-
-    cardBack.appendChild(message);
+    messageEmptyLocalStorage();
 
     //Desaparecer el boton porque ya se uso, pero realmente lo que hay es que remover el contenedor del boton de remover item y el boton de save to favorites
     const containerOfRemoveButton = document.querySelector(".options__favorites-container");
@@ -206,7 +199,16 @@ function clearAdvicesList() {
         const containerOfGoBackButton = document.querySelector(".options__save-advice-container");
         containerOfGoBackButton.classList.add("save-advice-container--button-centered");
     }
-    
+}
+
+function messageEmptyLocalStorage() {
+    //Mostrar mensaje al usuario que no hay items agregados
+    const cardBack = document.querySelector(".card__back");
+    const message = document.createElement("p");
+    message.textContent = "NO ITEMS ADDED 😓";
+    cardBack.classList.add("card--message");
+    message.classList.add("message");
+    cardBack.appendChild(message);
 }
 
 function goBackToFrontfaceCard() {
@@ -223,23 +225,17 @@ function goBackToFrontfaceCard() {
     containerOfRemoveButton.classList.remove("buttons--transform");
 }
 
-function openAndCloseAdvice(event) {
-    //En esta funcion tiene que ir la logica para abrir el advice, eso quiere decir que el elemento que tiene el id debe tener un listener que dispare esta funcion.
-    // console.log(event.target);
-    
-    // const liItems = document.querySelectorAll(".back__items");
-    // console.log(liItems);
-
+function openAndCloseStoredAdvice(event) {
+    //En esta funcion tiene que ir la logica para abrir el advice, eso quiere decir que el elemento que tiene el id debe tener un listener que dispare esta funcion.    
     const liItem = event.target.closest(".back__items");
     const specificItemClicked = event.target.closest(".items__advice-number");
     const specificRemoveItemClicked = event.target.closest(".items__remove-item");
+    const storage = JSON.parse(localStorage.getItem("adviceObject"));
     console.log(specificItemClicked);
-    console.log(specificRemoveItemClicked);
     
     if (specificItemClicked) {
-        const storage = JSON.parse(localStorage.getItem("adviceObject"));
         console.log(storage);
-        
+
         const findSpecificItem = storage.find(item => {
             const adviceId = specificItemClicked.textContent.substring(8);
             console.log(adviceId);
@@ -263,11 +259,33 @@ function openAndCloseAdvice(event) {
                     dropDownArrow.classList.remove("drop-down-arrow--rotate");
                     adviceElement.remove();
                 }
-            }
+            } 
         })
-
         console.log(findSpecificItem);
-        
+    } else if (specificRemoveItemClicked) {
+        const findSpecificRemoveButton = storage.find(item => {
+            const adviceId = specificRemoveItemClicked.previousSibling.textContent.substring(8);
+
+            if(item.id === adviceId) {
+                console.log(item);
+                const liContainerToRemove = specificRemoveItemClicked.closest(".back__items");
+                const removeAdviceFromArray = storage.filter(element => element !== item);
+                liContainerToRemove.remove();
+                localStorage.setItem("adviceObject", JSON.stringify(removeAdviceFromArray));
+            } 
+        });
+
+        console.log(storage.length);
+        //Si eliminan el ultimo elemento mostrar el mensaje que ya no hay items añadidos y ocultar el boton de remover todos los items ya que no seria necesario
+        if (storage.length === 1) {
+            const containerOfRemoveButton = document.querySelector(".options__favorites-container");
+            containerOfRemoveButton.classList.add("inactive"); 
+            messageEmptyLocalStorage();
+
+            //Aqui si hay que usar el metodo removeItem, porque necesitamos eliminar el array completamente
+            localStorage.removeItem("adviceObject");
+        }
+        console.log(findSpecificRemoveButton);
     }
 }
 

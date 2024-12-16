@@ -27,7 +27,7 @@ async function getAdvice() {
 
         setTimeout(function () {
             diceImage.classList.remove("get-advice__dice-img--rotate");
-        }, 500);
+        }, 1000);
         
         const favoriteListButton = document.querySelector(".options__favorites");
 
@@ -59,7 +59,7 @@ function saveFavoriteAdvice() {
         adviceStoredNotification.classList.add("notification-message");
         main.prepend(adviceStoredNotification); 
         setTimeout(function() {
-            adviceStoredNotification.classList.add("transition");
+            adviceStoredNotification.classList.add("notification-transition");
         });
         adviceStoredNotification.addEventListener("transitionend", () => {
             adviceStoredNotification.remove();
@@ -73,7 +73,7 @@ function saveFavoriteAdvice() {
         advicePreviouslyStored.classList.add("notification-message");
         main.prepend(advicePreviouslyStored); 
         setTimeout(function() {
-            advicePreviouslyStored.classList.add("transition");
+            advicePreviouslyStored.classList.add("notification-transition");
         });
         advicePreviouslyStored.addEventListener("transitionend", () => {
             advicePreviouslyStored.remove();
@@ -92,7 +92,6 @@ function saveFavoriteAdvice() {
     } else if(containerOfRemoveButton.classList.contains("inactive")) {
         //Al removerle la clase inactive, el contenedor vuelve a ser visible, necesitamos eso a partir de la segunda iteracion o cuando no exista el contenedor en el DOM
         containerOfRemoveButton.classList.remove("inactive");
-        containerOfGoBackButton.classList.remove("save-advice-container--button-centered");
     }
     
     const favoriteListButton = document.querySelector(".options__favorites");
@@ -186,8 +185,8 @@ function showFavoritesList() {
         const removeAllItemsButtonCreated = document.createElement("button");
         const goBackButtonCreated = document.createElement("button");
     
-        removeAllItemsButtonCreated.textContent = "REMOVE ALL ITEMS ❌";
-        goBackButtonCreated.textContent = "GO BACK ⬅";
+        removeAllItemsButtonCreated.textContent = "REMOVE ALL ADVICES ❌";
+        goBackButtonCreated.textContent = "GO BACK ◀";
         removeAllItemsButtonCreated.classList.add("options__remove-all-items", "button-styles", "options--childs");
         goBackButtonCreated.classList.add("options__go-back", "button-styles", "options--childs");
         favoritesButton.classList.add("options--childs");
@@ -217,12 +216,6 @@ function clearAdvicesList() {
     //Desaparecer el boton porque ya se uso, pero realmente lo que hay es que remover el contenedor del boton de remover item y el boton de save to favorites
     const containerOfRemoveButton = document.querySelector(".options__favorites-container");
     containerOfRemoveButton.classList.add("inactive");
-    
-    //Rodar al centro el boton de go back solo de 600px en adelante
-    if (window.matchMedia("(min-width: 600px)").matches) {
-        const containerOfGoBackButton = document.querySelector(".options__save-advice-container");
-        containerOfGoBackButton.classList.add("save-advice-container--button-centered");
-    }
 }
 
 function messageEmptyLocalStorage() {

@@ -8,9 +8,6 @@ diceButton.addEventListener("click", getAdvice);
 
 async function getAdvice() {
     try {
-        const diceImage = document.querySelector(".get-advice__dice-img");
-        diceImage.classList.add("get-advice__dice-img--rotate");
-
         const response = await fetch(API);
         const data = await response.json();
         console.log(data.slip);
@@ -20,9 +17,17 @@ async function getAdvice() {
         adviceString.textContent = `"${data.slip.advice}"`;
         adviceNumber.textContent = `ADVICE #${data.slip.id}`;
 
-        // Guarda el consejo actual en el botón de guardar favoritos 
+        // Guarda el consejo actual como un atributo en el botón de guardar favoritos 
         saveFavoriteButton.dataset.id = data.slip.id; 
         saveFavoriteButton.dataset.advice = data.slip.advice;
+
+        //Dice image rotating
+        const diceImage = document.querySelector(".get-advice__dice-img");
+        diceImage.classList.add("get-advice__dice-img--rotate");
+
+        setTimeout(function () {
+            diceImage.classList.remove("get-advice__dice-img--rotate");
+        }, 500);
         
         const favoriteListButton = document.querySelector(".options__favorites");
 
@@ -90,7 +95,6 @@ function saveFavoriteAdvice() {
         containerOfGoBackButton.classList.remove("save-advice-container--button-centered");
     }
     
-
     const favoriteListButton = document.querySelector(".options__favorites");
 
     if(favoriteListButton) {
@@ -270,7 +274,7 @@ function openAndCloseStoredAdvice(event) {
                   
                 if(!adviceElement) {
                     adviceElement = document.createElement("span");
-                    adviceElement.textContent = item.advice;
+                    adviceElement.textContent = `"${item.advice}"`;
                     adviceElement.classList.add("items__advice-string");
                     liItem.append(adviceElement);
                     //Rotar la imagen de la flecha mirando hacia abajo

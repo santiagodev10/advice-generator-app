@@ -99,12 +99,12 @@ main {
 }
 
 .front__get-advice:hover get-advice__dice-img {
-    transform: scale(1.6);
+    transform: scale(2.6);
 }
 
 .get-advice__dice-img--rotate {
     transform: rotate(180deg);
-    transition: all 0.5s;
+    transition: transform 0.5s;
 }
 
 .card__back {

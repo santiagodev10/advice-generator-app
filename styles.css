@@ -238,12 +238,11 @@ img {
     color: var(--Dark-Grayish-Blue);
     background-color: var(--Neon-Green);
     cursor: pointer;
-}
-
-.button-styles:hover {
-    transition: all 0.1s linear 0.1s;
-    color: var(--Light-Cyan);
-    background-color: var(--Dark-Blue);
+    &hover {
+        transition: all 0.1s linear 0.1s;
+        color: var(--Light-Cyan);
+        background-color: var(--Dark-Blue);
+    }
 }
 
 .buttons--transition {
